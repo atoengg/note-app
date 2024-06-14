@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { CustomButton } from "../components/CustomButton";
 
-const NoteCard = ({ item, setCurrentPage }) => (
+const NoteCard = ({ item, setCurrentPage, deleteNote, showModal }) => (
   <View style={styles.card}>
     <Text style={styles.cardTitle}>{item.title}</Text>
     <Text>{item.desc}</Text>
@@ -22,13 +22,13 @@ const NoteCard = ({ item, setCurrentPage }) => (
         text="Hapus"
         fontSize={12}
         width={100}
-        onPress={() => {}}
+        onPress={() => showModal(item.id)}
       />
     </View>
   </View>
 );
 
-export const Home = ({ noteList, setCurrentPage }) => {
+export const Home = ({ noteList, setCurrentPage, deleteNote, showModal }) => {
   return (
     <View style={styles.container}>
       <CustomButton
@@ -43,7 +43,7 @@ export const Home = ({ noteList, setCurrentPage }) => {
         showsVerticalScrollIndicator={false}
         data={noteList}
         renderItem={({item}) => (
-          <NoteCard item={item} setCurrentPage={setCurrentPage}/>
+          <NoteCard item={item} setCurrentPage={setCurrentPage} deleteNote={deleteNote} showModal={showModal}/>
         )}
         keyExtractor={(item) => item.id}
       />
