@@ -10,15 +10,18 @@ const CurrentPageWidget = ({
   setCurrentPage,
   addNote,
   deleteNote,
-  showModal
+  showModal,
+  editNote,
+  setCurrentNote,
+  currentNote
 }) => {
   switch (currentPage) {
     case "home":
-      return <Home noteList={noteList} setCurrentPage={setCurrentPage} deleteNote={deleteNote} showModal={showModal} />;
+      return <Home noteList={noteList} setCurrentPage={setCurrentPage} deleteNote={deleteNote} showModal={showModal} setCurrentNote={setCurrentNote}/>;
     case "add":
       return <AddNote setCurrentPage={setCurrentPage} addNote={addNote} />;
     case "edit":
-      return <EditNote />;
+      return <EditNote setCurrentPage={setCurrentPage} editNote={editNote} currentNote={currentNote}/>;
     default:
       return <Home />;
   }
@@ -33,6 +36,8 @@ export default function App() {
 
   const [noteToDelete, setNoteToDelete] = useState(null)
 
+  const [currentNote, setCurrentNote] = useState(null)
+
   const addNote = (title, desc) => {
     const id = noteList.length > 0 ? noteList[noteList.length - 1].id + 1 : 1;
 
@@ -44,6 +49,17 @@ export default function App() {
         desc: desc,
       },
     ]);
+  };
+
+  const editNote = (id, title, desc) => {
+    const updatedNotes = noteList.map(note => {
+      if (note.id === id) {
+        return { ...note, title, desc };
+      }
+      return note;
+    });
+    setNoteList(updatedNotes);
+    setCurrentPage('home');
   };
 
   const deleteNote = (id) => {
@@ -66,6 +82,9 @@ export default function App() {
         addNote={addNote}
         deleteNote={deleteNote}
         showModal={showModal}
+        editNote={editNote}
+        setCurrentNote={setCurrentNote}
+        currentNote={currentNote}
       />
 
       <Modal transparent={true} animationType="slide" visible={isModalVisible} onRequestClose={() => {
